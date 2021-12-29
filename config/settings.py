@@ -40,7 +40,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["django_countries"]
+THIRD_PARTY_APPS = ["django_countries", "django_seed"]
 
 PROTECT_APPS = [
     "core.apps.CoreConfig",  # 기본
@@ -135,3 +135,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 AUTH_USER_MODEL = "users.User"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")  # photos 절대경로
+MEDIA_URL = "/media/"  # uploads 속 파일들 다룸  #"/~":절대경로

@@ -57,21 +57,40 @@ class Room(core_models.TimeStampedModel):
     city = models.CharField(max_length=80)
     price = models.IntegerField()
     address = models.CharField(max_length=140)
-    quests = models.IntegerField()
+    guests = models.IntegerField()
     beds = models.IntegerField()
     bedrooms = models.IntegerField()
     baths = models.IntegerField()
     check_in = models.TimeField()
     check_out = models.TimeField()
     instant_book = models.BooleanField(default=False)
-    host = models.ForeignKey(user_models.User, on_delete=models.CASCADE)  # 참조키, 1대다
-    room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True)
-    amenities = models.ManyToManyField(Amenity, blank=True)
-    facilities = models.ManyToManyField(Facility, blank=True)
-    house_rules = models.ManyToManyField(HouseRule, blank=True)
+    host = models.ForeignKey(
+        user_models.User, related_name="rooms", on_delete=models.CASCADE
+    )  # 참조키, 1대다
+    room_type = models.ForeignKey(
+        RoomType, related_name="rooms", on_delete=models.SET_NULL, null=True
+    )
+    amenities = models.ManyToManyField(Amenity, related_name="rooms", blank=True)
+    facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
+    house_rules = models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):  # override
+        self.city = str.capitalize(self.city)  # 첫글자 대문자로!
+        super().save(self, *args, **kwargs)
+
+    def total_rate(self):
+        all_reviews = self.reviews.all()
+        all_ratings = 0
+        for review in all_reviews:
+            all_ratings += review.rating_average()
+
+        if len(all_reviews) == 0:
+            return 0
+        else:
+            return all_ratings / len(all_reviews)
 
 
 class Photo(core_models.TimeStampedModel):
@@ -79,8 +98,10 @@ class Photo(core_models.TimeStampedModel):
     """Photo Model Definition"""
 
     caption = models.CharField(max_length=80)
-    file = models.ImageField()
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True, blank=True)
+    file = models.ImageField(upload_to="room_photos")  # uploads의 어떤 폴더에 업로드 할 것인지
+    room = models.ForeignKey(
+        Room, related_name="photos", on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return self.caption

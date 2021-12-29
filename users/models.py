@@ -16,8 +16,8 @@ class User(AbstractUser):  # 상속
         (GENDER_OTHER, "Other"),
     )
 
-    LANGUAGE_ENGLISH = "english"
-    LANGUAGE_KOREAN = "korean"
+    LANGUAGE_ENGLISH = "English"
+    LANGUAGE_KOREAN = "Korean"
 
     LANGUAGE_CHOICES = ((LANGUAGE_ENGLISH, "en"), (LANGUAGE_KOREAN, "kr"))
 
@@ -26,10 +26,10 @@ class User(AbstractUser):  # 상속
 
     CURRENCY_CHOICES = ((CURRENCY_USD, "USD"), (CURRENCY_KRW, "KRW"))
 
-    avater = models.ImageField(blank=True)
+    avater = models.ImageField(upload_to="avatars", blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
     bio = models.TextField(blank=True)
     birthdate = models.DateField(blank=True, null=True)
-    language = models.CharField(choices=LANGUAGE_CHOICES, max_length=2, blank=True)
+    language = models.CharField(choices=LANGUAGE_CHOICES, max_length=10, blank=True)
     currency = models.CharField(choices=CURRENCY_CHOICES, max_length=3, blank=True)
     superhost = models.BooleanField(default=False)
