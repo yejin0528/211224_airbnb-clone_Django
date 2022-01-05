@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block page_title %} home {% endblock page_title %}
+{% block content %} {{now}} {% for room in rooms %}
+<h4>
+  <a href="{% url 'rooms:detail' room.pk %}">{{room.name}} / ${{room.price}}</a>
+</h4>
+{% endfor %}
+
+<!--3. using class based View-->
+<h5>
+  {% if page_obj.has_previous %}
+  <a href="?page={{page_obj.previous_page_number}">Pre</a>
+  {% endif %}
+  <!---->
+  Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+  <!---->
+  {% if page_obj.has_next %}
+  <a href="?page={{page_obj.next_page_number}}">Next</a>
+  {% endif %}
+</h5>
+{% endblock%}
+
+<!--2. using function based View--
+<h5>
+  {% if pages.has_previous %}
+  <a href="?page={{pages.previous_page_number}">Pre</a>
+  {% endif %}
+  
+  Page {{pages.number}} of {{pages.paginator.num_pages}}
+  
+  {% if pages.has_next %}
+  <a href="?page={{pages.next_page_number}}">Next</a>
+  {% endif %}
+</h5>
+-->
+
+<!--3. using python
+  <h5>
+  {% if page != 1 %}
+  <a href="?page={{page|add:-1}}">Pre</a>
+  {% endif %} Page {{page}} of {{page_count}}
+
+  {% if page is not page_count %}
+  <a href="?page={{page|add:1}}">Next</a>
+  {%endif%}
+</h5>
+-->
+
+<!--
+{% for page in page_range %}
+<a href="?page={{page}}">{{page }}</a>{% endfor %}
+-->

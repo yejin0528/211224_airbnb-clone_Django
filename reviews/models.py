@@ -5,9 +5,9 @@ from core import models as core_models
 class Review(core_models.TimeStampedModel):
 
     review = models.TextField()
-    accurancy = models.IntegerField()
+    accuracy = models.IntegerField()
     communication = models.IntegerField()
-    cleanlines = models.IntegerField()
+    cleanliness = models.IntegerField()
     location = models.IntegerField()
     check_in = models.IntegerField()
     value = models.IntegerField()
@@ -23,9 +23,9 @@ class Review(core_models.TimeStampedModel):
 
     def rating_average(self):
         avg = (
-            self.accurancy
+            self.accuracy
             + self.communication
-            + self.cleanlines
+            + self.cleanliness
             + self.location
             + self.check_in
             + self.value

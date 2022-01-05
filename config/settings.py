@@ -25,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "01!5)n@y(gtfoh!&)i55g#9rxnqz!ipk34l70%ey^y%=%kc-d3"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = "*"
 
 
 # Application definition
@@ -40,6 +40,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
+# pipenv
 THIRD_PARTY_APPS = ["django_countries", "django_seed"]
 
 PROTECT_APPS = [
@@ -69,7 +70,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],  # templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
