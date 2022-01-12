@@ -2,7 +2,6 @@ from django.db import models
 from django.urls import reverse
 from django_countries.fields import CountryField
 from core import models as core_models
-from users import models as user_models
 
 
 class AbstractItem(core_models.TimeStampedModel):
@@ -57,7 +56,7 @@ class Room(core_models.TimeStampedModel):
     city = models.CharField(max_length=80)
     price = models.IntegerField()
     address = models.CharField(max_length=140)
-    guests = models.IntegerField()
+    guests = models.IntegerField(help_text="How many people will be staying?")
     beds = models.IntegerField()
     bedrooms = models.IntegerField()
     baths = models.IntegerField()
@@ -65,14 +64,14 @@ class Room(core_models.TimeStampedModel):
     check_out = models.TimeField()
     instant_book = models.BooleanField(default=False)
     host = models.ForeignKey(
-        user_models.User, related_name="rooms", on_delete=models.CASCADE
-    )  # 참조키, 1대다
-    room_type = models.ForeignKey(
-        RoomType, related_name="rooms", on_delete=models.SET_NULL, null=True
+        "users.User", related_name="rooms", on_delete=models.CASCADE
     )
-    amenities = models.ManyToManyField(Amenity, related_name="rooms", blank=True)
-    facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
-    house_rules = models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
+    room_type = models.ForeignKey(
+        "RoomType", related_name="rooms", on_delete=models.SET_NULL, null=True
+    )
+    amenities = models.ManyToManyField("Amenity", related_name="rooms", blank=True)
+    facilities = models.ManyToManyField("Facility", related_name="rooms", blank=True)
+    house_rules = models.ManyToManyField("HouseRule", related_name="rooms", blank=True)
 
     def __str__(self):
         return self.name
